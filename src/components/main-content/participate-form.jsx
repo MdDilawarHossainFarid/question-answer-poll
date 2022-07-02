@@ -80,7 +80,7 @@ class Participationform extends React.Component {
           </Button>
         </div>
 
-        {/* {this.props.poll.options.map((opt) => {
+        {this.props.poll.options.map((opt) => {
           return (
             <FormGroup className="my-2" key={opt.id}>
               <Label className="d-flex">
@@ -123,7 +123,7 @@ class Participationform extends React.Component {
               </Label>
             </FormGroup>
           );
-        })} */}
+        })}
         <FormGroup className="my-3">
           <Label>Enter your name</Label>
 

@@ -21,12 +21,13 @@ class App extends React.Component {
   addNewPoll = (poll) => {
     poll.id = shortid.generate();
     poll.created = new Date();
-    // (poll.totalVote = 0),
-    //   (poll.opinions = []),
+    poll.totalVote = 0;
+    poll.opinions = [];
+
     this.setState({ polls: this.state.polls.concat(poll) });
   };
 
-  updatePolll = (updatedPoll) => {
+  updatePoll = (updatedPoll) => {
     const polls = [...this.state.polls];
     const poll = polls.find((p) => p.id === updatedPoll.id);
 
@@ -39,17 +40,50 @@ class App extends React.Component {
 
   deletePoll = (pollId) => {
     const polls = this.state.polls.filter((p) => p.id !== pollId);
+
     this.setState({ polls, selectPoll: {} });
   };
 
   selectPoll = (pollId) => {
     const poll = this.state.polls.find((p) => p.id === pollId);
-    this.setState({ selectPoll: poll });
+
+    this.setState({ selectedPoll: poll });
   };
 
-  handleSearch = (searchTerm) => {};
+  getOpinion = (response) => {
+    const { polls } = this.state;
+
+    const poll = polls.find((p) => p.id === response.pollId);
+    const option = poll.options.find((o) => o.id === response.selectedOption);
+
+    poll.totalVote++;
+    option.vote++;
+
+    const opinion = {
+      id: shortid.generate(),
+      name: response.name,
+      selectedOption: response.selectedOption,
+    };
+
+    poll.opinions.push(opinion);
+
+    this.setState({ polls });
+  };
+
+  handleSearch = (searchTerm) => {
+    this.setState({ searchTerm });
+  };
+
+  performSearch = () => {
+    return this.state.polls.filter((poll) =>
+      poll.title
+        .toLowerCase()
+        .includes(this.state.searchTerm.toLocaleLowerCase())
+    );
+  };
 
   render() {
+    // const polls = this.performSearch();
     return (
       <Container>
         <Row>
@@ -63,7 +97,12 @@ class App extends React.Component {
             />
           </Col>
           <Col md={8}>
-            <MainContent />
+            <MainContent
+              poll={this.state.selectedPoll}
+              getOpinion={this.getOpinion}
+              updatePoll={this.updatePoll}
+              deletePoll={this.deletePoll}
+            />
           </Col>
         </Row>
       </Container>

@@ -1,7 +1,7 @@
 import React from "react";
 import shortid from "shortid";
 
-import Form from "./form";
+import FormJsx from "./form";
 
 const defaultOption = [
   { id: shortid.generate(), value: "", vote: 0 },
@@ -15,6 +15,18 @@ class PollForm extends React.Component {
     options: defaultOption,
     errors: {},
   };
+
+  componentDidMount() {
+    const { poll } = this.props;
+    if (poll && Object.keys(poll).length > 0) {
+      this.setState({
+        title: poll.title,
+        description: poll.description,
+        options: poll.options,
+      });
+    }
+  }
+
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -48,22 +60,31 @@ class PollForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+
     const { isValid, errors } = this.validate();
 
     if (isValid) {
       const { title, description, options } = this.state;
-      this.props.submit({
+      const poll = {
         title,
         description,
         options,
-      });
-      event.target.reset();
-      this.setState({
-        title: "",
-        description: "",
-        options: defaultOption,
-        errors: {},
-      });
+      };
+
+      if (this.props.isUpdate) {
+        poll.id = this.props.poll.id;
+        this.props.submit(poll);
+        alert("Updated Successfully");
+      } else {
+        this.props.submit(poll);
+        event.target.reset();
+        this.setState({
+          title: "",
+          description: "",
+          options: defaultOption,
+          errors: {},
+        });
+      }
     } else {
       this.setState({ errors });
     }
@@ -107,7 +128,7 @@ class PollForm extends React.Component {
   render() {
     const { title, description, options, errors } = this.state;
     return (
-      <Form
+      <FormJsx
         title={title}
         description={description}
         options={options}
@@ -118,7 +139,7 @@ class PollForm extends React.Component {
         createOption={this.createOption}
         deleteOption={this.deleteOptions}
         handleSubmit={this.handleSubmit}
-      ></Form>
+      ></FormJsx>
     );
   }
 }

@@ -23,13 +23,17 @@ class Sidebar extends React.Component {
             value={this.props.searchTerm}
             onChange={(e) => this.props.handleSeacrh(e.target.value)}
           />
+
           <Button color="success" className="ml-2" onClick={this.toggleModal}>
             New
           </Button>
         </div>
+
         <h3>List of Polls</h3>
         <hr />
+
         <PollList polls={this.props.polls} selectPoll={this.props.selectPoll} />
+
         <Modal
           isOpen={this.state.openModal}
           toggle={this.toggleModal}

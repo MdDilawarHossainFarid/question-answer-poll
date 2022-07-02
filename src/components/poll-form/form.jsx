@@ -27,7 +27,7 @@ const FormJsx = ({
         <Input
           name="title"
           id="title"
-          placeHnolder="A Dummy Title"
+          placeHolder="A Dummy Title"
           value={title}
           onChange={handleChange}
           invalid={errors.title ? true : false}
@@ -37,9 +37,9 @@ const FormJsx = ({
       <FormGroup>
         <Label for="description">Description</Label>
         <Input
-          name="textarea"
+          name="description"
           id="description"
-          placeHnolder="Descripb Your Poll"
+          placeHolder="Describ Your Poll"
           value={description}
           onChange={handleChange}
           invalid={errors.title ? true : false}
@@ -83,7 +83,7 @@ const FormJsx = ({
           );
         })}
       </FormGroup>
-      <Button color="primary" tyope="submit">
+      <Button color="primary" type="submit">
         {buttonValue}
       </Button>
     </Form>
